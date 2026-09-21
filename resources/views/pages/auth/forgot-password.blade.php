@@ -1,31 +1,133 @@
-<x-layouts::auth :title="__('Forgot password')">
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Forgot password')" :description="__('Enter your email to receive a password reset link')" />
+<!DOCTYPE html>
+<html lang="fr">
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+<head>
+    <meta charset="UTF-8">
 
-        <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-6">
-            @csrf
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-            <!-- Email Address -->
-            <flux:input
-                name="email"
-                :label="__('Email address')"
-                type="email"
-                required
-                autofocus
-                placeholder="email@example.com"
-            />
+    <title>Mot de passe oublié</title>
 
-            <flux:button variant="primary" type="submit" class="w-full" data-test="email-password-reset-link-button">
-                {{ __('Email password reset link') }}
-            </flux:button>
-        </form>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-400">
-            <span>{{ __('Or, return to') }}</span>
-            <flux:link :href="route('login')" wire:navigate>{{ __('log in') }}</flux:link>
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6 col-lg-5">
+
+            <h1 class="text-center mb-3">
+                Mot de passe oublié
+            </h1>
+
+            <p class="text-center text-secondary mb-4">
+                Entrez votre adresse e-mail pour recevoir un lien de réinitialisation.
+            </p>
+
+
+            @if (session('status'))
+
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+
+            @endif
+
+
+            @if ($errors->any())
+
+                <div class="alert alert-danger">
+
+                    <ul class="mb-0">
+
+                        @foreach ($errors->all() as $error)
+
+                            <li>
+                                {{ $error }}
+                            </li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            @endif
+
+
+            <form
+                method="POST"
+                action="{{ route('password.email') }}"
+            >
+
+                @csrf
+
+
+                <div class="mb-3">
+
+                    <label
+                        for="email"
+                        class="form-label"
+                    >
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value="{{ old('email') }}"
+                        class="form-control"
+                        placeholder="email@example.com"
+                        required
+                        autofocus
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-danger w-100"
+                >
+                    Envoyer le lien
+                </button>
+
+            </form>
+
+
+            <div class="text-center mt-3">
+
+                <a
+                    href="{{ route('login') }}"
+                    class="text-danger"
+                >
+                    Retour à la connexion
+                </a>
+
+            </div>
+
         </div>
+
     </div>
-</x-layouts::auth>
+
+</div>
+
+</body>
+
+</html>

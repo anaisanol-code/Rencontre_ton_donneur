@@ -1,58 +1,150 @@
-<x-layouts::auth :title="__('Log in')">
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
+<!DOCTYPE html>
+<html lang="fr">
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Connexion</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6 col-lg-5">
+
+            <h1 class="text-center mb-4">
+                Connexion
+            </h1>
+
+            @if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login.store') }}">
+
+                @csrf
+
+                <div class="mb-3">
+
+                    <label for="email" class="form-label">
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value="{{ old('email') }}"
+                        class="form-control"
+                        required
+                        autofocus
+                    >
+
+                </div>
 
 
-        <form method="POST" action="{{ route('login.store') }}" class="flex flex-col gap-6">
-            @csrf
+                <div class="mb-3">
 
-            <!-- Email Address -->
-            <flux:input
-                name="email"
-                :label="__('Email address')"
-                :value="old('email')"
-                type="email"
-                required
-                autofocus
-                autocomplete="email"
-                placeholder="email@example.com"
-            />
+                    <label for="password" class="form-label">
+                        Mot de passe
+                    </label>
 
-            <!-- Password -->
-            <div class="relative">
-                <flux:input
-                    name="password"
-                    :label="__('Password')"
-                    type="password"
-                    required
-                    autocomplete="current-password"
-                    :placeholder="__('Password')"
-                    viewable
-                />
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="form-control"
+                        required
+                    >
 
-                @if (Route::has('password.request'))
-                    <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
-                        {{ __('Forgot your password?') }}
-                    </flux:link>
-                @endif
+                </div>
+
+
+                <div class="form-check mb-3">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                        id="remember"
+                        class="form-check-input"
+                    >
+
+                    <label
+                        for="remember"
+                        class="form-check-label"
+                    >
+                        Se souvenir de moi
+                    </label>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-danger w-100"
+                >
+                    Se connecter
+                </button>
+
+            </form>
+
+
+            <div class="text-center mt-3">
+
+                <a
+                    href="{{ route('password.request') }}"
+                    class="text-danger"
+                >
+                    Mot de passe oublié ?
+                </a>
+
             </div>
 
-            <!-- Remember Me -->
-            <flux:checkbox name="remember" :label="__('Remember me')" :checked="old('remember')" />
 
-            <div class="flex items-center justify-end">
-                <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
-                    {{ __('Log in') }}
-                </flux:button>
+            <div class="text-center mt-2">
+
+                <span>
+                    Pas encore de compte ?
+                </span>
+
+                <a
+                    href="{{ route('register') }}"
+                    class="text-danger"
+                >
+                    Inscription
+                </a>
+
             </div>
-        </form>
 
-        <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
-            <span>{{ __('Don\'t have an account?') }}</span>
-            <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
         </div>
+
     </div>
-</x-layouts::auth>
+
+</div>
+
+</body>
+
+</html>
